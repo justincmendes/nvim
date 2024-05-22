@@ -190,12 +190,20 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
+-- Move lines: like ⌥+↑ or ⌥+↓ in VSCode!
+vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
+vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
+
+-- Improved Page [U]p/[D]own
+vim.keymap.set('n', '<C-d>', '<C-d>zz')
+vim.keymap.set('n', '<C-u>', '<C-u>zz')
+
 -- Enter: New Line (below/above)
-vim.keymap.set('n', '<CR>', '@="m`o<C-V><Esc>``"<CR>')
--- Unfortunately '<S-CR>' doesn't register on macOS iTerm, so this will
--- do for now since it's not a frequent operation and I could move up
--- one then use the forward '<CR>' keymap above
-vim.keymap.set('n', '<leader><CR>', '@="m`O<C-V><Esc>``"<CR>')
+-- <S-CR> = 0x03 0x18 0x63 = ^Xc
+-- <M-CR> = 0x03 0x18 0x6D = ^Xm
+-- <M-S-CR> = 0x03 0x18 0x4D = ^XM
+vim.keymap.set('n', '^Xc', '@="m`o<C-V><Esc>``"<CR>')
+vim.keymap.set('n', '^XM', '@="m`O<C-V><Esc>``"<CR>')
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
