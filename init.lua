@@ -181,14 +181,14 @@ vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' }
 -- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
 -- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
 
--- Keybinds to make split navigation easier.
---  Use CTRL+<hjkl> to switch between windows
---
---  See `:help wincmd` for a list of all window commands
-vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
-vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
-vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+-- -- Keybinds to make split navigation easier.
+-- --  Use CTRL+<hjkl> to switch between windows
+-- --
+-- --  See `:help wincmd` for a list of all window commands
+-- vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
+-- vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
+-- vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
+-- vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
 -- Move lines: like ⌥+↑ or ⌥+↓ in VSCode!
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
@@ -206,12 +206,36 @@ vim.keymap.set('n', '<C-u>', '<C-u>zz')
 vim.keymap.set('n', 'n', 'nzzzv')
 vim.keymap.set('n', 'N', 'Nzzzv')
 
+-- Improved/Advanced Paste: replace text and keep original buffer
+vim.keymap.set('x', '<leader>p', [["_dP]])
+
 -- Enter: New Line (below/above)
--- <S-CR> = 0x03 0x18 0x63 = ^Xc
--- <M-CR> = 0x03 0x18 0x6D = ^Xm
--- <M-S-CR> = 0x03 0x18 0x4D = ^XM
+-- <S-CR> = 0x03 0x18 0x63 = ^C^Xc
+-- <M-CR> = 0x03 0x18 0x6D = ^C^Xm
+-- <M-S-CR> = 0x03 0x18 0x4D = ^C^XM
 vim.keymap.set('n', '^Xc', '@="m`o<C-V><Esc>``"<CR>')
 vim.keymap.set('n', '^XM', '@="m`O<C-V><Esc>``"<CR>')
+
+-- Better Yanking/Copying and Deleting/Cutting:
+-- Separate buffer yanks and deletes from system clipboard
+vim.keymap.set({ 'n', 'v' }, '<leader>y', [["+y]])
+vim.keymap.set('n', '<leader>Y', [["+Y]])
+
+vim.keymap.set({ 'n', 'v' }, '<leader>d', [["_d]])
+
+-- Protects you from: ZQ
+-- quit and throw away unsaved changes
+vim.keymap.set('n', 'Q', '<nop>')
+
+vim.keymap.set('n', '<leader>f', vim.lsp.buf.format)
+
+vim.keymap.set('n', '<C-k>', '<cmd>cnext<CR>zz')
+vim.keymap.set('n', '<C-j>', '<cmd>cprev<CR>zz')
+vim.keymap.set('n', '<leader>k', '<cmd>lnext<CR>zz')
+vim.keymap.set('n', '<leader>j', '<cmd>lprev<CR>zz')
+
+vim.keymap.set('n', '<leader>x', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
+vim.keymap.set('n', '<leader>X', '<cmd>!chmod +x %<CR>', { silent = true })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
