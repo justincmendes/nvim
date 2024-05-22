@@ -194,9 +194,17 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
 vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
 
--- Improved Page [U]p/[D]own
+-- Improved J append: keeps cursor in place
+-- instead of moving it to the end of the appended line
+vim.keymap.set('n', 'J', 'mzJ`z')
+
+-- Improved Page [U]p/[D]own: jumps to center
 vim.keymap.set('n', '<C-d>', '<C-d>zz')
 vim.keymap.set('n', '<C-u>', '<C-u>zz')
+
+-- Improved Search: keeps terms in center
+vim.keymap.set('n', 'n', 'nzzzv')
+vim.keymap.set('n', 'N', 'Nzzzv')
 
 -- Enter: New Line (below/above)
 -- <S-CR> = 0x03 0x18 0x63 = ^Xc
