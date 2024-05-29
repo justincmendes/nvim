@@ -213,12 +213,12 @@ vim.keymap.set('x', '<leader>p', [["_dP]])
 -- <S-CR> = 0x03 0x18 0x63 = ^C^Xc
 -- <M-CR> = 0x03 0x18 0x6D = ^C^Xm
 -- <M-S-CR> = 0x03 0x18 0x4D = ^C^XM
+vim.keymap.set('n', '<C-C><C-X>c', '@="m`o<C-V><Esc>``"<CR>')
 -- vim.keymap.set('n', '<leader>o', '@="m`o<C-V><Esc>``"<CR>')
 -- vim.keymap.set('n', '^Xc', '@="m`o<C-V><Esc>``"<CR>')
-vim.keymap.set('n', '<C-C><C-X>c', '@="m`o<C-V><Esc>``"<CR>')
+vim.keymap.set('n', '<C-C><C-X>M', '@="m`O<C-V><Esc>``"<CR>')
 -- vim.keymap.set('n', '<leader>O', '@="m`O<C-V><Esc>``"<CR>')
 -- vim.keymap.set('n', '^XM', '@="m`O<C-V><Esc>``"<CR>')
-vim.keymap.set('n', '<C-C><C-X>M', '@="m`O<C-V><Esc>``"<CR>')
 
 -- Better Yanking/Copying and Deleting/Cutting:
 -- Separate buffer yanks and deletes from system clipboard
@@ -559,6 +559,9 @@ require('lazy').setup({
           -- WARN: This is not Goto Definition, this is Goto Declaration.
           --  For example, in C this would take you to the header.
           map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+
+          -- Get function signature help while in insert mode if unsure what the signature
+          vim.keymap.set('i', '<C-s>', vim.lsp.buf.signature_help, { buffer = event.buf, desc = 'LSP: Function [S]ignature Help' })
 
           -- The following two autocommands are used to highlight references of the
           -- word under your cursor when your cursor rests there for a little while.
