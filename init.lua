@@ -20,6 +20,9 @@ vim.opt.guicursor = 'n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50'
     .. ',a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor'
     .. ',sm:block-blinkwait175-blinkoff150-blinkon175'
 
+-- TODO: Separate system and buffer clipboards
+-- TODO: Make sure last yank includes +y yanking too...
+
 -- Make line numbers default
 vim.opt.number = true
 -- You can also add relative line numbers, to help with jumping.
@@ -35,7 +38,8 @@ vim.opt.showmode = false
 -- Sync clipboard between OS and Neovim.
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
-vim.opt.clipboard = 'unnamedplus'
+-- vim.opt.clipboard = 'unnamedplus'
+vim.opt.clipboard = ''
 
 -- Enable break indent
 vim.opt.breakindent = true
@@ -147,7 +151,10 @@ vim.keymap.set('n', '<leader>O', '@="m`O<C-V><Esc>``"<CR>')
 vim.keymap.set({ 'n', 'v' }, '<leader>y', [["+y]])
 vim.keymap.set('n', '<leader>Y', [["+Y]])
 
-vim.keymap.set({ 'n', 'v' }, '<leader>d', [["_d]])
+vim.keymap.set({ 'n', 'v' }, '<leader>y', [[y]], { silent = true })
+vim.keymap.set('n', '<leader>Y', [[Y]], { silent = true })
+
+vim.keymap.set({ 'n', 'v' }, '<leader>d', [["+d]])
 
 -- Protects you from: ZQ
 -- quit and throw away unsaved changes
@@ -160,9 +167,45 @@ vim.keymap.set('n', '<C-j>', '<cmd>cprev<CR>zz')
 vim.keymap.set('n', '<leader>k', '<cmd>lnext<CR>zz')
 vim.keymap.set('n', '<leader>j', '<cmd>lprev<CR>zz')
 
-vim.keymap.set('n', '<leader>rp', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = '[R]e[p]lace All' })
 vim.keymap.set('n', '<leader>X', '<cmd>!chmod +x %<CR>',
   { silent = true, desc = 'CHMOD +x (Make current file e[x]ecutable)' })
+
+-- TODO: Make these into a plugin?
+vim.keymap.set('n', '<leader>rwi', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
+  { desc = '[R]eplace [w]ord [I]gnorecase' })
+vim.keymap.set('n', '<leader>rw', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/g<Left><Left>]],
+  { desc = '[R]eplace [w]ord (Case-Sensitive)' })
+-- vim.keymap.set('n', '<leader>rWi', [[:%s/\<<C-r><C-W>\>/<C-r><C-W>/gI<Left><Left><Left>]], { desc = '[R]eplace [W]ord [I]gnorecase' })
+-- vim.keymap.set('n', '<leader>rW', [[:%s/\<<C-r><C-W>\>/<C-r><C-W>/g<Left><Left>]], { desc = '[R]eplace [W]ord (Case-Sensitive)' })
+vim.keymap.set('v', '<leader>ri', [["ry:%s/<C-r>r/<C-r>r/gI<Left><Left><Left>]], { desc = '[R]eplace [I]gnorecase' })
+vim.keymap.set('v', '<leader>r', [["ry:%s/<C-r>r/<C-r>r/g<Left><Left>]], { desc = '[R]eplace (Case-Sensitive)' })
+
+vim.keymap.set(
+  'n',
+  '<leader>rwic',
+  [[mr:,$s/\<<C-r><C-w>\>/<C-r><C-w>/gIc<BAR>1,''-&&<BAR>norm!`r<Left><Left><Left><Left>]],
+  { desc = '[R]eplace [w]ord [I]gnorecase [C]onfirm' }
+)
+vim.keymap.set(
+  'n',
+  '<leader>rwic',
+  [[mr:,$s/\<<C-r><C-w>\>/<C-r><C-w>/gc<BAR>1,''-&&<BAR>norm!`r<Left><Left><Left><Left>]],
+  { desc = '[R]eplace [w]ord (Case-Sensitive) [C]onfirm' }
+)
+-- vim.keymap.set('n', '<leader>rWic', [[:%s/\<<C-r><C-W>\>/<C-r><C-W>/gIc<Left><Left><Left><Left>]], { desc = '[R]eplace [W]ord [I]gnorecase [C]onfirm' })
+-- vim.keymap.set('n', '<leader>rWc', [[:%s/\<<C-r><C-W>\>/<C-r><C-W>/gc<Left><Left><Left>]], { desc = '[R]eplace [W]ord (Case-Sensitive) [C]onfirm' })
+vim.keymap.set(
+  'v',
+  '<leader>ric',
+  [["ry:,$s/<C-r>r/<C-r>r/gIc<BAR>1,''-&&<BAR>norm!`><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>]],
+  { desc = '[R]eplace [I]gnorecase [C]onfirm' }
+)
+vim.keymap.set(
+  'v',
+  '<leader>rc',
+  [["ry:,$s/<C-r>r/<C-r>r/gc<BAR>1,''-&&<BAR>norm!`><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>]],
+  { desc = '[R]eplace [C]onfirm (Case-Sensitive)' }
+)
 
 -- TODO: 'Make [i]n [w]ord [t]itlecase'
 
@@ -303,13 +346,6 @@ require('lazy').setup({
       -- Useful for getting pretty icons, but requires a Nerd Font.
       { 'nvim-tree/nvim-web-devicons',            enabled = vim.g.have_nerd_font },
     },
-    opts = {
-      pickers = {
-        find_files = {
-          hidden = true,
-        },
-      },
-    },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that
       -- it can fuzzy find! It's more than just a "file finder", it can search
@@ -342,6 +378,12 @@ require('lazy').setup({
         --   },
         -- },
         -- pickers = {}
+        defaults = {
+          file_ignore_patterns = {
+            '.*/?%.git/',
+            '.*/?node_modules/',
+          },
+        },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
@@ -357,10 +399,14 @@ require('lazy').setup({
       local builtin = require 'telescope.builtin'
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
-      vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
+      vim.keymap.set('n', '<leader>sf', function()
+        builtin.find_files { hidden = true }
+      end, { desc = '[S]earch [F]iles' })
       vim.keymap.set('n', '<leader>st', builtin.builtin, { desc = '[S]earch Select [T]elescope' })
       vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
-      vim.keymap.set('n', '<leader>ss', builtin.live_grep, { desc = '[S]earch by Grep' })
+      vim.keymap.set('n', '<leader>ss', function()
+        builtin.live_grep { additional_args = { '--hidden' } }
+      end, { desc = '[S]earch by Grep' })
       vim.keymap.set('n', '<leader>sg', builtin.git_files, { desc = '[S]earch [G]it Files' })
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
