@@ -171,12 +171,14 @@ vim.keymap.set('n', '<leader>X', '<cmd>!chmod +x %<CR>',
   { silent = true, desc = 'CHMOD +x (Make current file e[x]ecutable)' })
 
 -- TODO: Make these into a plugin?
-vim.keymap.set('n', '<leader>rwi', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
-  { desc = '[R]eplace [w]ord [I]gnorecase' })
-vim.keymap.set('n', '<leader>rw', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/g<Left><Left>]],
+vim.keymap.set('n', '<leader>rwi', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gi<Left><Left><Left>]],
+  { desc = '[R]eplace [w]ord [i]gnorecase' })
+vim.keymap.set('n', '<leader>rw', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
   { desc = '[R]eplace [w]ord (Case-Sensitive)' })
--- vim.keymap.set('n', '<leader>rWi', [[:%s/\<<C-r><C-W>\>/<C-r><C-W>/gI<Left><Left><Left>]], { desc = '[R]eplace [W]ord [I]gnorecase' })
--- vim.keymap.set('n', '<leader>rW', [[:%s/\<<C-r><C-W>\>/<C-r><C-W>/g<Left><Left>]], { desc = '[R]eplace [W]ord (Case-Sensitive)' })
+vim.keymap.set('n', '<leader>rWi', [[:%s/\<<C-r><C-a>\>/<C-r><C-a>/gi<Left><Left><Left>]],
+  { desc = '[R]eplace [W]ord [I]gnorecase' })
+vim.keymap.set('n', '<leader>rW', [[:%s/\<<C-r><C-a>\>/<C-r><C-a>/gI<Left><Left><Left>]],
+  { desc = '[R]eplace [W]ord (Case-Sensitive)' })
 vim.keymap.set('v', '<leader>ri', [["ry:%s/<C-r>r/<C-r>r/gI<Left><Left><Left>]], { desc = '[R]eplace [I]gnorecase' })
 vim.keymap.set('v', '<leader>r', [["ry:%s/<C-r>r/<C-r>r/g<Left><Left>]], { desc = '[R]eplace (Case-Sensitive)' })
 
@@ -488,7 +490,7 @@ require('lazy').setup({
       -- Null-ls Auto Formatting
       -- a table with the LSPs and whether or not
       -- they're allowed to format buffers
-      local servers_filters = {
+      local servers_format_filters = {
         ['html'] = false,       -- we use prettier
         ['tsserver'] = false,   -- we use prettier
         ['eslint'] = false,     -- not for formatting
@@ -596,28 +598,29 @@ require('lazy').setup({
             end, '[T]oggle Inlay [H]ints')
           end
 
-          -- Null-ls Auto Formatting
-          local curr_bufnr = event.bufnr
-          local augroup = vim.api.nvim_create_augroup('LspFormatting', {})
-          local lsp_formatting = function(bufnr)
-            vim.lsp.buf.format {
-              bufnr = bufnr,
-              filter = function(client)
-                -- true if can format, false otherwise
-                return servers_filters[client.name]
-              end,
-            }
-          end
-          if client.supports_method 'textDocument/formatting' then
-            vim.api.nvim_clear_autocmds { group = augroup, buffer = curr_bufnr }
-            vim.api.nvim_create_autocmd('BufWritePre', {
-              group = augroup,
-              buffer = curr_bufnr,
-              callback = function()
-                lsp_formatting(curr_bufnr)
-              end,
-            })
-          end
+          -- -- Null-ls Auto Formatting
+          -- local curr_bufnr = event.bufnr
+          -- local augroup = vim.api.nvim_create_augroup('LspFormatting', {})
+          -- local lsp_formatting = function(bufnr)
+          --   vim.lsp.buf.format {
+          --     bufnr = bufnr,
+          --     filter = function(client)
+          --       -- true if can format, false otherwise
+          --       return servers_format_filters[client.name]
+          --     end,
+          --   }
+          -- end
+          -- -- Format on save
+          -- if client.supports_method 'textDocument/formatting' then
+          --   vim.api.nvim_clear_autocmds { group = augroup, buffer = curr_bufnr }
+          --   vim.api.nvim_create_autocmd('BufWritePre', {
+          --     group = augroup,
+          --     buffer = curr_bufnr,
+          --     callback = function()
+          --       lsp_formatting(curr_bufnr)
+          --     end,
+          --   })
+          -- end
         end,
       })
 
@@ -964,7 +967,7 @@ require('lazy').setup({
   require 'kickstart.plugins.debug',
   require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
-  require 'kickstart.plugins.autopairs',
+  -- require 'kickstart.plugins.autopairs',
   -- require 'kickstart.plugins.neo-tree',
   require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
