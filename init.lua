@@ -29,6 +29,14 @@ vim.opt.number = true
 --  Experiment for yourself to see if you like it!
 vim.opt.relativenumber = true
 
+vim.opt.colorcolumn = '80'
+
+-- tab = 4-spaces
+vim.opt.tabstop = 4
+-- shiftwidth = 0 -> always match tabstop
+vim.opt.shiftwidth = 0
+vim.opt.expandtab = true
+
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
 
@@ -160,7 +168,7 @@ vim.keymap.set({ 'n', 'v' }, '<leader>d', [["+d]])
 -- quit and throw away unsaved changes
 vim.keymap.set('n', 'Q', '<nop>')
 
-vim.keymap.set('n', '<leader>f', vim.lsp.buf.format)
+vim.keymap.set('n', '<leader>f', vim.lsp.buf.format, { desc = '[F]ormat buffer' })
 
 vim.keymap.set('n', '<C-k>', '<cmd>cnext<CR>zz')
 vim.keymap.set('n', '<C-j>', '<cmd>cprev<CR>zz')
