@@ -88,6 +88,12 @@ vim.opt.cursorline = true
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
 
+-- Allow for folds based on indent (for collapsing code blocks like IDEs)
+vim.opt.foldmethod = 'indent'
+vim.opt.foldlevel = 99 -- Start with all folds open (99 > any actual fold level)
+vim.opt.foldenable = true
+
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
