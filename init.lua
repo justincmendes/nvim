@@ -89,7 +89,8 @@ vim.opt.cursorline = true
 vim.opt.scrolloff = 10
 
 -- Allow for folds based on indent (for collapsing code blocks like IDEs)
-vim.opt.foldmethod = 'indent'
+vim.opt.foldmethod = 'expr'
+vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
 vim.opt.foldlevel = 99 -- Start with all folds open (99 > any actual fold level)
 vim.opt.foldenable = true
 
