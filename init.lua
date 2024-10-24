@@ -93,6 +93,7 @@ vim.opt.foldmethod = 'expr'
 vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
 vim.opt.foldlevel = 99 -- Start with all folds open (99 > any actual fold level)
 vim.opt.foldenable = true
+vim.opt.foldtext = [[substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g').'...'.trim(getline(v:foldend))]]
 
 
 -- [[ Basic Keymaps ]]
