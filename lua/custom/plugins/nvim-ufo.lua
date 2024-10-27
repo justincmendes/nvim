@@ -5,7 +5,7 @@ return {
   },
   config = function()
     vim.o.foldcolumn = '0' -- '1' is not bad
-    vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+    vim.o.foldlevel = 99   -- Using ufo provider need a large value, feel free to decrease the value
     vim.o.foldlevelstart = 99
     vim.o.foldenable = true
 
@@ -18,5 +18,11 @@ return {
         vim.lsp.buf.hover()
       end
     end, { desc = 'Peek Fold' })
+
+    require('ufo').setup {
+      provider_selector = function(bufnr, filetype, buftype)
+        return { 'lsp', 'treesitter', 'indent' }
+      end,
+    }
   end,
 }
