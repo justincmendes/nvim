@@ -182,6 +182,9 @@ vim.keymap.set('n', '<leader>j', '<cmd>lprev<CR>zz')
 vim.keymap.set('n', '<leader>X', '<cmd>!chmod +x %<CR>',
   { silent = true, desc = 'CHMOD +x (Make current file e[x]ecutable)' })
 
+-- Search within Visual block
+vim.keymap.set('x', '/', '<Esc>/\\%V')
+
 -- TODO: Create keybind to split data from the left of the cursor into a new line
 -- like J but for the opposite operation
 
