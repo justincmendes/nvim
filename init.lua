@@ -95,6 +95,9 @@ vim.opt.foldlevel = 99 -- Start with all folds open (99 > any actual fold level)
 vim.opt.foldenable = true
 vim.opt.foldtext = [[substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g').'...'.trim(getline(v:foldend))]]
 
+-- Allow more memory for larger regex (/) searching
+vim.opt.maxmempattern = 5000
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
