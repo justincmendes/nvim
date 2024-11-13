@@ -98,6 +98,9 @@ vim.opt.foldtext = [[substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop)
 -- Allow more memory for larger regex (/) searching
 vim.opt.maxmempattern = 5000
 
+-- Leave file line endings as is
+vim.opt.fixendofline = false
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
